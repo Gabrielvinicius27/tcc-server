@@ -1,18 +1,13 @@
 'use strict'
 
+/** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
 class EstoqueSchema extends Schema {
   up () {
     this.create('estoques', (table) => {
       table.increments()
-      table
-        .integer('user_id')
-        .unsigned()
-        .references('id')
-        .inTable('users')
-        .onUpdate('CASCADE')
-        .onDelete('CASCADE')
+      table.string('nome').notNullable().unique()
       table.string('tipo').notNullable()
       table.timestamps()
     })

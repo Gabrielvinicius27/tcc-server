@@ -1,93 +1,54 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with estoques
- */
+const Estoque = use("App/Models/Estoque")
 class EstoqueController {
-  /**
-   * Show a list of all estoques.
-   * GET estoques
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-  }
 
-  /**
-   * Render a form to be used for creating a new estoque.
-   * GET estoques/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
+    async store({request,response}) {
+        const data = request.only([
+            'nome',
+            'tipo'
+        ])
+        const estoque = await Estoque.create({...data})
+        return estoque
+    }
 
-  /**
-   * Create/save a new estoque.
-   * POST estoques
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+    async update ({ params, request, response }) {
+        const estoque = await Estoque.findOrFail(params.id)
+      
+        const data = request.only([
+            'nome',
+            'tipo'
+        ])
+      
+        estoque.merge(data)
+      
+        await estoque.save()
+      
+        return estoque
+    }
 
-  /**
-   * Display a single estoque.
-   * GET estoques/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+    async index () {
+        const estoques = Estoque.query()
+        .with('sensors.temperaturas')
+        .fetch()
+        return estoques
+    }
 
-  /**
-   * Render a form to update an existing estoque.
-   * GET estoques/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+    async show ({ params }) {
+        const estoque = await Estoque.findOrFail(params.id)
+        return estoque
+    }
 
-  /**
-   * Update estoque details.
-   * PUT or PATCH estoques/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+    async destroy ({ params, auth, response }) {
+        const estoque = await Estoque.findOrFail(params.id)
+      
+        if (auth.user.id == '') {
+          return response.status(401).send({ error: 'Not authorized' })
+        }
+      
+        await estoque.delete()
+    }
 
-  /**
-   * Delete a estoque with id.
-   * DELETE estoques/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = EstoqueController
