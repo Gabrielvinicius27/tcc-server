@@ -1,93 +1,56 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const { findOrFail } = require("../../Models/Produto")
+const Database = use('Database')
+const Produto = use('App/Models/Produto')
+const ProdutoUnidade = use("App/Models/ProdutoUnidade")
 
-/**
- * Resourceful controller for interacting with produtounidades
- */
 class ProdutoUnidadeController {
-  /**
-   * Show a list of all produtounidades.
-   * GET produtounidades
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+
+    async store({request,response}) {
+        const data = request.only([
+          'produto_barcode',
+          'value_code',
+          'numero_lote',
+          'data_validade',
+          'status',
+          'local',
+          'descricao'
+        ])
+
+        const produto_id = await Database.select('id')
+        .from('produtos')
+        .where('barcode',data['produto_barcode'])
+
+        const estoque_id = await Database.select('id')
+        .from('estoques')
+        .where('nome', data['local'])
+     
+        const produtoUnidade = await ProdutoUnidade
+        .create({...data,'produto_id':produto_id[0].id,'estoque_id':estoque_id[0].id})
+        
+        return produtoUnidade
+    }
+
+    async index () {
+      const produtosUnidade = ProdutoUnidade.all()
+      return produtosUnidade
+    }
+
+    async show ({ params }) {
+      const produtoUnidade = ProdutoUnidade.query()
+        .where('value_code',params.id)
+        .with('statusProduto')
+        .fetch()
+      return produtoUnidade
   }
 
-  /**
-   * Render a form to be used for creating a new produtounidade.
-   * GET produtounidades/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+    async destroy ({ params, auth, response }) {
+      const produtoUnidade = await ProdutoUnidade.findOrFail(params.id)
+    
+      await produtoUnidade.delete()
   }
 
-  /**
-   * Create/save a new produtounidade.
-   * POST produtounidades
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
-
-  /**
-   * Display a single produtounidade.
-   * GET produtounidades/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing produtounidade.
-   * GET produtounidades/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update produtounidade details.
-   * PUT or PATCH produtounidades/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a produtounidade with id.
-   * DELETE produtounidades/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = ProdutoUnidadeController

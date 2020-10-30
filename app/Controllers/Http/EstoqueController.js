@@ -30,6 +30,7 @@ class EstoqueController {
     async index () {
         const estoques = Estoque.query()
         .with('sensors.temperaturas')
+        .with('produtos_unidade')
         .fetch()
         return estoques
     }

@@ -10,6 +10,13 @@ class Estoque extends Model {
     sensors () {
         return this.hasMany('App/Models/Sensor')
     }
+    produtos_unidade() {
+        return this.hasMany('App/Models/ProdutoUnidade')
+    }
+    statusProduto() {
+        return this.hasMany('App/Models/StatusProduto')
+    }
+
 }
 
 module.exports = Estoque
