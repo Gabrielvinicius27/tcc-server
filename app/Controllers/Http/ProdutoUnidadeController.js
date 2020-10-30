@@ -39,7 +39,7 @@ class ProdutoUnidadeController {
 
     async show ({ params }) {
       const produtoUnidade = ProdutoUnidade.query()
-        .where('value_code',params.id)
+        .whereRaw(`value_code LIKE '${params.id}%'`)
         .with('statusProduto')
         .fetch()
       return produtoUnidade
