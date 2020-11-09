@@ -36,7 +36,9 @@ class EstoqueController {
     }
 
     async show ({ params }) {
-        const estoque = await Estoque.findOrFail(params.id)
+        const estoque = await Estoque.query()
+        .whereRaw(`nome = '${decodeURI(params.id)}'`)
+        .fetch()
         return estoque
     }
 
