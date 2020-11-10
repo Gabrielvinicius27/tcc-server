@@ -13,9 +13,8 @@ class EstoqueController {
     }
 
     async update ({ params, request, response }) {
-        const estoque  = await Estoque.query()
-        .whereRaw(`nome = '${decodeURI(params.id)}'`)
-        .fetch()
+      
+        const estoque = await Estoque.findBy('nome',decodeURI(params.id))
       
         const data = request.only([
             'nome',
