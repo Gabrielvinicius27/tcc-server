@@ -1,11 +1,14 @@
 'use strict'
 
+const ProdutoUnidadeController = require("../app/Controllers/Http/ProdutoUnidadeController")
+
 const Route = use("Route")
 
 Route.post('/users', 'UserController.create')
 Route.get('/users', 'UserController.index')
 Route.post('/sessions', 'SessionController.create')
 Route.post('/imageUpload','ImageController.create')
+Route.get('/produto_unidade/equal/:id', 'ProdutoUnidadeController.showProdutoUnidadeEqual')
 Route.resource('temperatura', 'TemperaturaController')
   .apiOnly()
   .middleware('auth')

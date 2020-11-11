@@ -43,7 +43,15 @@ class ProdutoUnidadeController {
         .with('statusProduto')
         .fetch()
       return produtoUnidade
-  }
+    }
+
+    async showProdutoUnidadeEqual({params}){
+      const produtoUnidade = ProdutoUnidade.query()
+        .whereRaw(`value_code = '${params.id}'`)
+        .with('statusProduto')
+        .fetch()
+      return produtoUnidade
+    }
 
     async destroy ({ params, auth, response }) {
       const produtoUnidade = await ProdutoUnidade.findOrFail(params.id)
