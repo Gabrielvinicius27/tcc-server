@@ -32,6 +32,25 @@ class ProdutoUnidadeController {
         return produtoUnidade
     }
 
+    async updateLocal ({ params, request, response }) {
+      const produtoUnidade = await ProdutoUnidade.findBy('value_code',params.id)
+    
+      const data = request.only([
+        'status',
+        'local',
+      ])
+
+      const estoque_id = await Database.select('id')
+      .from('estoques')
+      .where('nome', data['local'])
+
+      produtoUnidade.merge({...data,'estoque_id':estoque_id[0].id})
+    
+      await produtoUnidade.save()
+    
+      return produtoUnidade
+    }
+
     async index () {
       const produtosUnidade = ProdutoUnidade.all()
       return produtosUnidade
