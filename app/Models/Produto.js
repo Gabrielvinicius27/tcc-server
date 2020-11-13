@@ -8,6 +8,10 @@ class Produto extends Model {
     produtos_unidade () {
         return this.hasMany('App/Models/ProdutoUnidade')
     }
+    //Um produto tem uma linha da tabela meta e uma linha da tabela meta tem um produto 1-1
+    produto_metas(){
+        return this.hasOne('App/Models/ProdutoMeta')
+    }
 }
 
 module.exports = Produto

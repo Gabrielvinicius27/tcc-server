@@ -65,6 +65,7 @@ class ProdutoController {
     async show ({ params }) {
         const produto = await Produto.query()
         .where('barcode',params.id)
+        .with('produto_metas')
         .fetch()
         console.log(produto)
         return produto
