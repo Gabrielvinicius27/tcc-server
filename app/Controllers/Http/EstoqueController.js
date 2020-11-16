@@ -39,6 +39,8 @@ class EstoqueController {
     async show ({ params }) {
         const estoque = await Estoque.query()
         .whereRaw(`nome = '${decodeURI(params.id)}'`)
+        .with('sensors.temperaturas')
+        .with('produtos_unidade')
         .fetch()
         return estoque
     }
