@@ -1,4 +1,11 @@
-# Adonis fullstack application
+# Back-end TCC Monitoramento de Estoque e Temperatura de Supermercado
+
+Este é o Back-End do meu TCC!
+Foi desenvolvido em Node.JS usando o AdonisJs com o objetivo de utilizar as migrations para controlar 
+as modificações feitas no banco de dados já que fiz este projeto com mais colegas!
+Outro recurso interessante do Adonis é a forma facil de se trabalhar com autenticação de usuários!
+
+Abaixo estão algumas informações que o AdonisJs gerou!
 
 This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
 
